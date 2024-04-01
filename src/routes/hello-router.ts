@@ -1,4 +1,4 @@
-import { hello } from "@/handlers";
+import { hello } from "@/handlers/hello-handler";
 import { Hono } from "hono";
 
 const helloRouter = new Hono();
