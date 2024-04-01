@@ -1,4 +1,5 @@
 import { UserHandler } from "@/handlers/user-handler";
+import { HashService } from "@/lib/hash-service";
 import { userRequestSchema } from "@/models";
 import { UserRepository } from "@/repositories/user-repository";
 import { UserService } from "@/services/user-service";
@@ -7,8 +8,9 @@ import { Hono } from "hono";
 
 // BUILDING
 const userRouter = new Hono();
+const hashService = new HashService();
 const userRepository = new UserRepository();
-const userService = new UserService(userRepository);
+const userService = new UserService(userRepository, hashService);
 const handler = new UserHandler(userService);
 
 // VALIDATORS

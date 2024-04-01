@@ -1,4 +1,5 @@
 import { AuthHandler } from "@/handlers/auth-handler";
+import { HashService } from "@/lib/hash-service";
 import { signInSchema, signUpSchema } from "@/models/auth-model";
 import { UserRepository } from "@/repositories/user-repository";
 import { AuthService } from "@/services/auth-service";
@@ -8,9 +9,10 @@ import { Hono } from "hono";
 
 // BUILDING
 const authRouter = new Hono();
-const userRepo = new UserRepository();
-const userService = new UserService(userRepo);
-const authService = new AuthService(userRepo, userService);
+const hashService = new HashService();
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository, hashService);
+const authService = new AuthService(userRepository, userService, hashService);
 const handler = new AuthHandler(authService);
 
 // VALIDATORS
