@@ -1,8 +1,8 @@
 import type { HashService } from "@/lib/hash-service";
+import type { JwtService } from "@/lib/jwt-service";
 import type { SignInRequest, SignUpRequest } from "@/models/auth-model";
 import type { UserRepository } from "@/repositories/user-repository";
 import { CONSTANTS as C } from "@/utils/constants";
-import { generateJwtToken } from "@/utils/jwt";
 import type { JwtPayload, ServiceReturn } from "@/utils/types";
 import type { UserService } from "./user-service";
 
@@ -13,6 +13,7 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly userService: UserService,
     private readonly hashService: HashService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signIn(dto: SignInRequest): Return {
@@ -46,7 +47,7 @@ export class AuthService {
       username: user.username,
     };
 
-    const token = await generateJwtToken(payload);
+    const token = await this.jwtService.generateToken(payload);
 
     return {
       success: true,
@@ -56,9 +57,9 @@ export class AuthService {
 
   async signUp(dto: SignUpRequest): Return {
     const res = await this.userService.createuser(dto);
-
+    
     if (!res.success || !res.data) {
-      return { success: false, message: C.USER.FAILED.CREATE };
+      return { success: false, message: res.message || C.USER.FAILED.CREATE };
     }
 
     const user = res.data;
@@ -70,7 +71,7 @@ export class AuthService {
       username: user.username,
     };
 
-    const token = await generateJwtToken(payload);
+    const token = await this.jwtService.generateToken(payload);
 
     return { success: true, data: { token } };
   }
