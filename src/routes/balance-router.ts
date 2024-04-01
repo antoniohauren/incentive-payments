@@ -1,32 +1,28 @@
-import {
-  createBalanceHandler,
-  getBalanceHandler,
-  getBalanceListHandler,
-  updateBalanceHandler,
-} from "@/handlers/balance";
-import { deleteBalanceHandler } from "@/handlers/balance/delete-balance-handler";
+import { BalanceHandler } from "@/handlers/balance-handler";
 import {
   balanceRequestSchema,
   balanceUpdateSchema,
 } from "@/models/balance-model";
+import { BalanceRepository } from "@/repositories/balance-repository";
+import { BalanceService } from "@/services/balance-service";
 import { validator } from "@/utils/schema-validator";
 import { Hono } from "hono";
 
+// BUILDING
 const balanceRouter = new Hono();
+const balanceRepository = new BalanceRepository();
+const balanceService = new BalanceService(balanceRepository);
+const handler = new BalanceHandler(balanceService);
 
-balanceRouter.post(
-  "/create",
-  validator(balanceRequestSchema),
-  createBalanceHandler,
-);
+// VALIDATORS
+const createValidator = validator(balanceRequestSchema);
+const updateValidator = validator(balanceUpdateSchema);
 
-balanceRouter.get("/:id", getBalanceHandler);
-balanceRouter.get("/", getBalanceListHandler);
-balanceRouter.patch(
-  "/:id",
-  validator(balanceUpdateSchema),
-  updateBalanceHandler,
-);
-balanceRouter.delete("/:id", deleteBalanceHandler);
+// ROUTES
+balanceRouter.post("/create", createValidator, handler.createBalance());
+balanceRouter.patch("/:id", updateValidator, handler.updateBalance());
+balanceRouter.get("/:id", handler.getBalance());
+balanceRouter.get("/", handler.getBalanceList());
+balanceRouter.delete("/:id", handler.deleteBalance());
 
 export { balanceRouter };
