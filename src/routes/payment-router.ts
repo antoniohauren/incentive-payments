@@ -1,31 +1,32 @@
-import {
-  deletePaymentHandler,
-  getPaymentListHandler,
-} from "@/handlers/payment";
-import { createPaymentHandler } from "@/handlers/payment/create-payment-handler";
-import { getPaymentHandler } from "@/handlers/payment/get-payment-handler";
-import { updatePaymentHandler } from "@/handlers/payment/update-payment-handler";
+import { PaymentHandler } from "@/handlers/payment-handler";
 import {
   paymentRequestSchema,
   paymentUpdateSchema,
 } from "@/models/payment-model";
+import { BalanceRepository } from "@/repositories/balance-repository";
+import { PaymentRepository } from "@/repositories/payment-repository";
+import { BalanceService } from "@/services/balance-service";
+import { PaymentService } from "@/services/payment-service";
 import { validator } from "@/utils/schema-validator";
 import { Hono } from "hono";
 
+// BUILDING
 const paymentRouter = new Hono();
+const balanceRepository = new BalanceRepository();
+const paymentRepository = new PaymentRepository();
+const balanceService = new BalanceService(balanceRepository);
+const paymentService = new PaymentService(paymentRepository, balanceService);
+const handler = new PaymentHandler(paymentService);
 
-paymentRouter.post(
-  "create",
-  validator(paymentRequestSchema),
-  createPaymentHandler,
-);
-paymentRouter.get("/:id", getPaymentHandler);
-paymentRouter.get("/", getPaymentListHandler);
-paymentRouter.patch(
-  "/:id",
-  validator(paymentUpdateSchema),
-  updatePaymentHandler,
-);
-paymentRouter.delete("/:id", deletePaymentHandler);
+// VALIDATORS
+const createValidator = validator(paymentRequestSchema);
+const updateValidator = validator(paymentUpdateSchema);
+
+// ROUTES
+paymentRouter.post("create", createValidator, handler.createPayment());
+paymentRouter.patch("/:id", updateValidator, handler.updatePayment());
+paymentRouter.get("/:id", handler.getPayment());
+paymentRouter.get("/", handler.getPaymentlist());
+paymentRouter.delete("/:id", handler.deletePayment());
 
 export { paymentRouter };
