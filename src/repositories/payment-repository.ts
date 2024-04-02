@@ -1,10 +1,10 @@
 import { db } from "@/drizzle";
 import {
-  balance,
-  payment,
   type InsertPayment,
   type SelectPayment,
   type UpdatePayment,
+  balance,
+  payment,
 } from "@/schemas";
 import type { RepositoryRetrun } from "@/utils/types";
 import { eq } from "drizzle-orm";

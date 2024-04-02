@@ -1,6 +1,6 @@
 import type {
-    PaymentRequest,
-    PaymentUpdateRequest,
+  PaymentRequest,
+  PaymentUpdateRequest,
 } from "@/models/payment-model";
 import type { PaymentService } from "@/services/payment-service";
 import type { Handler } from "hono";

@@ -1,9 +1,9 @@
+import A from "node:assert";
+import T from "node:test";
 import type { ConfigService } from "@/lib/config-service";
 import type { HashService } from "@/lib/hash-service";
 import { JwtService } from "@/lib/jwt-service";
 import type { UserRepository } from "@/repositories/user-repository";
-import A from "node:assert";
-import T from "node:test";
 import { AuthService } from "./auth-service";
 import { UserService } from "./user-service";
 

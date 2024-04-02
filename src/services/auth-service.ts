@@ -57,7 +57,7 @@ export class AuthService {
 
   async signUp(dto: SignUpRequest): Return {
     const res = await this.userService.createuser(dto);
-    
+
     if (!res.success || !res.data) {
       return { success: false, message: res.message || C.USER.FAILED.CREATE };
     }

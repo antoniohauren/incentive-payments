@@ -1,5 +1,5 @@
 import { db } from "@/drizzle";
-import { user, type InsertUser, type SelectUser } from "@/schemas";
+import { type InsertUser, type SelectUser, user } from "@/schemas";
 import type { RepositoryRetrun } from "@/utils/types";
 import { eq } from "drizzle-orm";
 

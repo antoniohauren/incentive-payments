@@ -1,6 +1,6 @@
 import type {
-    BalanceRequest,
-    BalanceUpdateRequest,
+  BalanceRequest,
+  BalanceUpdateRequest,
 } from "@/models/balance-model";
 import type { BalanceService } from "@/services/balance-service";
 import type { JwtPayload } from "@/utils/types";

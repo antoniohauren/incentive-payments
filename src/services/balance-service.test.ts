@@ -1,11 +1,11 @@
+import A from "node:assert";
+import T from "node:test";
 import type {
   BalanceRequest,
   BalanceUpdateRequest,
 } from "@/models/balance-model";
 import type { BalanceRepository } from "@/repositories/balance-repository";
 import type { SelectBalance, SelectBalanceWithPayments } from "@/schemas";
-import A from "node:assert";
-import T from "node:test";
 import { BalanceService } from "./balance-service";
 
 T.describe("balance-service", () => {

@@ -1,8 +1,8 @@
+import A from "node:assert";
+import T from "node:test";
 import type { HashService } from "@/lib/hash-service";
 import type { UserRequest } from "@/models";
 import type { UserRepository } from "@/repositories/user-repository";
-import A from "node:assert";
-import T from "node:test";
 import { UserService } from "./user-service";
 
 const now = new Date();
