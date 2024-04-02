@@ -1,5 +1,7 @@
 import { AuthHandler } from "@/handlers/auth-handler";
+import { ConfigService } from "@/lib/config-service";
 import { HashService } from "@/lib/hash-service";
+import { JwtService } from "@/lib/jwt-service";
 import { signInSchema, signUpSchema } from "@/models/auth-model";
 import { UserRepository } from "@/repositories/user-repository";
 import { AuthService } from "@/services/auth-service";
@@ -12,7 +14,14 @@ const authRouter = new Hono();
 const hashService = new HashService();
 const userRepository = new UserRepository();
 const userService = new UserService(userRepository, hashService);
-const authService = new AuthService(userRepository, userService, hashService);
+const configService = new ConfigService();
+const jwtService = new JwtService(configService);
+const authService = new AuthService(
+  userRepository,
+  userService,
+  hashService,
+  jwtService,
+);
 const handler = new AuthHandler(authService);
 
 // VALIDATORS

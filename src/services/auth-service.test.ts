@@ -1,5 +1,6 @@
+import type { ConfigService } from "@/lib/config-service";
 import type { HashService } from "@/lib/hash-service";
-import type { JwtService } from "@/lib/jwt-service";
+import { JwtService } from "@/lib/jwt-service";
 import type { UserRepository } from "@/repositories/user-repository";
 import A from "node:assert";
 import T from "node:test";
@@ -10,6 +11,7 @@ T.describe("auth-service", () => {
   let userRepository: UserRepository;
   let userService: UserService;
   let hashService: HashService;
+  let configService: ConfigService;
   let jwtService: JwtService;
   let sut: AuthService;
 
@@ -40,10 +42,14 @@ T.describe("auth-service", () => {
       isValidHash: () => true,
     };
 
-    jwtService = {
-      secret: "secret",
-      generateToken: async () => "valid_token",
+    configService = {
+      jwt_secret: "secret",
+      load() {},
     };
+
+    jwtService = new JwtService(configService);
+
+    T.mock.method(jwtService, "generateToken", () => "valid_token");
 
     userService = new UserService(userRepository, hashService);
     sut = new AuthService(userRepository, userService, hashService, jwtService);
