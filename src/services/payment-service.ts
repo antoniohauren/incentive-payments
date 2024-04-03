@@ -14,7 +14,7 @@ type Return<T = SelectPayment> = Promise<ServiceReturn<T>>;
 export class PaymentService {
   constructor(
     private readonly repository: PaymentRepository,
-    private readonly balance: BalanceService,
+    private readonly balanceService: BalanceService,
   ) {}
 
   async createPayment(dto: PaymentRequest): Return {
@@ -25,7 +25,7 @@ export class PaymentService {
       value: dto.value,
     };
 
-    const res = await this.balance.getBalance(dto.balanceId);
+    const res = await this.balanceService.getBalance(dto.balanceId);
 
     if (!res.success || !res.data) {
       return { success: false, message: C.BALANCE.FAILED.FOUND };
